@@ -32,7 +32,7 @@ export class Genres extends Component{
                 )
             }
         );
-
+        
         this.setState({genres:filteredData});
 
     }

@@ -21,7 +21,7 @@ function App() {
           </h3>
           <ul className="navbar-nav">
             <li className="nav-item- m-1">
-              <Link className="btn btn-light btn-outline-primary" to="/readed">
+              <Link className="btn btn-light btn-outline-primary" to="/">
                 Прочитанные книги
               </Link>
             </li>
@@ -45,7 +45,7 @@ function App() {
 
       
         <Routes>
-          <Route path="/readed" element={<Readed />} />
+          <Route path="/" element={<Readed />} />
           <Route path="/readnow" element={<ReadNow />} />
           <Route path="/willread" element={<WillRead />} />
           <Route path="/genres" element={<Genres />} />

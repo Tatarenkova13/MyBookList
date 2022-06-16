@@ -15,8 +15,63 @@ export class ReadNow extends Component {
             BookName:"",
             BookAuthor:"",
             Genre:"",
-            BookStatus:""
+            BookStatus:"",
+
+            BookIdFilter:"",
+            BookNameFilter:"",
+            BookAuthorFilter:"",
+            GenreFilter:"",
+            booksWithoutFilter:[]
         }
+    }
+
+    FilterFn(){
+        var BookNameFilter = this.state.BookNameFilter;
+        var BookAuthorFilter = this.state.BookAuthorFilter;
+        var GenreFilter = this.state.GenreFilter;
+
+        var filteredData=this.state.booksWithoutFilter.filter(
+            function(el){
+                return el.BookName.toString().toLowerCase().includes(
+                    BookNameFilter.toString().trim().toLowerCase()
+                )&&
+                el.BookAuthor.toString().toLowerCase().includes(
+                    BookAuthorFilter.toString().trim().toLowerCase()
+                )&&
+                el.Genre.toString().toLowerCase().includes(
+                    GenreFilter.toString().trim().toLowerCase()
+                )
+            }
+        );
+
+        this.setState({books:filteredData});
+
+    }
+
+    sortResult(prop,asc){
+        var sortedData=this.state.booksWithoutFilter.sort(function(a,b){
+            if(asc){
+                return (a[prop]>b[prop])?1:((a[prop]<b[prop])?-1:0);
+            }
+            else{
+                return (b[prop]>a[prop])?1:((b[prop]<a[prop])?-1:0);
+            }
+        });
+
+        this.setState({books:sortedData});
+    }
+
+    changeBookNameFilter = (e)=>{
+        this.state.BookNameFilter=e.target.value;
+        this.FilterFn();
+    }
+    changeBookAuthorFilter = (e)=>{
+        this.state.BookAuthorFilter=e.target.value;
+        this.FilterFn();
+    }
+    changeGenreFilter = (e)=>{
+        this.state.GenreFilter=e.target.value;
+        this.FilterFn();
     }
 
     refreshList(){
@@ -24,7 +79,7 @@ export class ReadNow extends Component {
         fetch(variables.API_URL+'book')
         .then(response=>response.json())
         .then(data=>{
-            this.setState({books:data});
+            this.setState({books:data, booksWithoutFilter:data});
         });
 
         fetch(variables.API_URL+'genre')
@@ -43,7 +98,7 @@ export class ReadNow extends Component {
     componentDidMount(){
         this.refreshList();
     }
-    
+
     changeBookName =(e)=>{
         this.setState({BookName:e.target.value});
     }
@@ -172,12 +227,69 @@ export class ReadNow extends Component {
     <thead>
     <tr>
         <th>
+            <div className="d-flex flex-row">
+                <input className="form-control m-2"
+                onChange={this.changeBookNameFilter}
+                placeholder="Фильтр"/>
+
+                <button type="button" className="btn btn-outline-ligh"
+                onClick={()=>this.sortResult('BookName',true)}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-down" viewBox="0 0 16 16">
+                    <path fillRule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"/>
+                    </svg>
+                </button>
+
+                <button type="button" className="btn btn-outline-ligh"
+                onClick={()=>this.sortResult('BookName',false)}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-up" viewBox="0 0 16 16">
+                    <path fillRule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"/>
+                    </svg>
+                </button>
+            </div>
             Название книги
         </th>
         <th>
+            <div className="d-flex flex-row">
+                <input className="form-control m-2"
+                onChange={this.changeBookAuthorFilter}
+                placeholder="Фильтр"/>
+
+                <button type="button" className="btn btn-outline-ligh"
+                onClick={()=>this.sortResult('BookAuthor',true)}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-down" viewBox="0 0 16 16">
+                    <path fillRule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"/>
+                    </svg>
+                </button>
+
+                <button type="button" className="btn btn-outline-ligh"
+                onClick={()=>this.sortResult('BookAuthor',false)}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-up" viewBox="0 0 16 16">
+                    <path fillRule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"/>
+                    </svg>
+                </button>
+            </div>
             Автор книги
         </th>
         <th>
+            <div className="d-flex flex-row">
+                <input className="form-control m-2"
+                onChange={this.changeGenreFilter}
+                placeholder="Фильтр"/>
+
+                <button type="button" className="btn btn-outline-ligh"
+                onClick={()=>this.sortResult('Genre',true)}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-down" viewBox="0 0 16 16">
+                    <path fillRule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"/>
+                    </svg>
+                </button>
+
+                <button type="button" className="btn btn-outline-ligh"
+                onClick={()=>this.sortResult('Genre',false)}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-up" viewBox="0 0 16 16">
+                    <path fillRule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"/>
+                    </svg>
+                </button>
+            </div>
             Жанр книги
         </th>
         <th>
@@ -186,7 +298,7 @@ export class ReadNow extends Component {
     </tr>
     </thead>
     <tbody>
-        {books.map(bk=>
+        {books.filter(book => book.BookStatus === "Читаю").map(bk=>
             <tr key={bk.BookId}>
                 <td>{bk.BookName}</td>
                 <td>{bk.BookAuthor}</td>
@@ -269,6 +381,7 @@ export class ReadNow extends Component {
 
 
      </div>
+    
     </div>
 
     {BookId===0?

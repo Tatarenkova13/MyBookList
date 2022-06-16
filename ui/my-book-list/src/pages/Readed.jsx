@@ -27,7 +27,7 @@ export class Readed extends Component {
 
     FilterFn(){
         var BookNameFilter = this.state.BookNameFilter;
-        var BookAuthorFilter = this.state.BookNameFilter;
+        var BookAuthorFilter = this.state.BookAuthorFilter;
         var GenreFilter = this.state.GenreFilter;
 
         var filteredData=this.state.booksWithoutFilter.filter(
@@ -62,16 +62,15 @@ export class Readed extends Component {
     }
 
     changeBookNameFilter = (e)=>{
-        this.setState({BookNameFilter: e.target.value});
+        this.state.BookNameFilter=e.target.value;
         this.FilterFn();
     }
     changeBookAuthorFilter = (e)=>{
-        this.setState({BookAuthorFilter: e.target.value});
+        this.state.BookAuthorFilter=e.target.value;
         this.FilterFn();
     }
     changeGenreFilter = (e)=>{
         this.state.GenreFilter=e.target.value;
-        
         this.FilterFn();
     }
 
@@ -80,7 +79,7 @@ export class Readed extends Component {
         fetch(variables.API_URL+'book')
         .then(response=>response.json())
         .then(data=>{
-            this.setState({books:data});
+            this.setState({books:data, booksWithoutFilter:data});
         });
 
         fetch(variables.API_URL+'genre')
@@ -99,7 +98,7 @@ export class Readed extends Component {
     componentDidMount(){
         this.refreshList();
     }
-    
+
     changeBookName =(e)=>{
         this.setState({BookName:e.target.value});
     }
@@ -299,7 +298,7 @@ export class Readed extends Component {
     </tr>
     </thead>
     <tbody>
-        {books.map(bk=>
+        {books.filter(book => book.BookStatus === "Прочитанно").map(bk=>
             <tr key={bk.BookId}>
                 <td>{bk.BookName}</td>
                 <td>{bk.BookAuthor}</td>
